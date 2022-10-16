@@ -35,6 +35,39 @@ export const getPosts = async () => {
     const result = await request(graphqlAPI , query)
     return result.postsConnection.edges
 }
+export const getPostsDetails = async (slug) => {
+    const query = gql`
+    query getPostDetails($slug : String!) {
+      post(where : {slug : $slug}) {
+              author {
+                bio
+                name
+                id
+                photo {
+                  url
+                }
+              }
+              slug
+              title
+              createdAt
+              excert
+              featuredImage {
+                url
+              }
+              categories {
+                name
+                slug
+              }
+              content { 
+                raw
+              }
+            }
+          }   
+    `
+
+    const result = await request(graphqlAPI , query , {slug})
+    return result.post
+}
 
 export const getRecentPost = async () => {
     const query = gql`
